@@ -2747,21 +2747,28 @@ var registerPlugin$3 = videojs.registerPlugin || videojs.plugin; // const dom = 
 
 var onPlayerReady$1 = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(player, options) {
-    var _player$options_, eventId, user, playerUrl, streamId, token, seshRes, seshId;
+    var _player$options_, eventId, _player$options_$user, user, playerUrl, streamId, _player$options_$toke, token, seshRes, seshId;
 
     return regeneratorRuntime.wrap(function _callee4$(_context4) {
       while (1) {
         switch (_context4.prev = _context4.next) {
           case 0:
             player.addClass("vjs-livecastplugin");
-            _player$options_ = player.options_, eventId = _player$options_.eventId, user = _player$options_.user, playerUrl = _player$options_.playerUrl, streamId = _player$options_.streamId, token = _player$options_.token;
+            _player$options_ = player.options_, eventId = _player$options_.eventId, _player$options_$user = _player$options_.user, user = _player$options_$user === void 0 ? null : _player$options_$user, playerUrl = _player$options_.playerUrl, streamId = _player$options_.streamId, _player$options_$toke = _player$options_.token, token = _player$options_$toke === void 0 ? null : _player$options_$toke; // halihazırda player, user ya da token olmadan da izlenilmesine izin veriyor
+
             player.src({
               type: "application/x-mpegURL",
               src: playerUrl
             });
             player.hlsQualitySelector();
             _context4.prev = 4;
-            _context4.next = 7;
+
+            if (!(token && user)) {
+              _context4.next = 9;
+              break;
+            }
+
+            _context4.next = 8;
             return axios$1({
               method: "post",
               url: "session-connections",
@@ -2776,18 +2783,21 @@ var onPlayerReady$1 = /*#__PURE__*/function () {
               }
             });
 
-          case 7:
+          case 8:
             seshRes = _context4.sent;
-            _context4.next = 13;
+
+          case 9:
+            _context4.next = 14;
             break;
 
-          case 10:
-            _context4.prev = 10;
+          case 11:
+            _context4.prev = 11;
             _context4.t0 = _context4["catch"](4);
             console.log(_context4.t0);
 
-          case 13:
-            seshId = seshRes.data._id;
+          case 14:
+            seshId = seshRes.data._id || null; // token, user ve sessionId'ye sahipsek kullanıcı metriklerini yolla
+
             player.eventTracking({
               performance: function () {
                 var _performance = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(data) {
@@ -2796,7 +2806,13 @@ var onPlayerReady$1 = /*#__PURE__*/function () {
                       switch (_context.prev = _context.next) {
                         case 0:
                           _context.prev = 0;
-                          _context.next = 3;
+
+                          if (!(token && user && seshId)) {
+                            _context.next = 4;
+                            break;
+                          }
+
+                          _context.next = 4;
                           return axios$1({
                             method: "post",
                             url: "session-connections",
@@ -2812,21 +2828,21 @@ var onPlayerReady$1 = /*#__PURE__*/function () {
                             }
                           });
 
-                        case 3:
-                          _context.next = 8;
+                        case 4:
+                          _context.next = 9;
                           break;
 
-                        case 5:
-                          _context.prev = 5;
+                        case 6:
+                          _context.prev = 6;
                           _context.t0 = _context["catch"](0);
                           console.log(_context.t0);
 
-                        case 8:
+                        case 9:
                         case "end":
                           return _context.stop();
                       }
                     }
-                  }, _callee, null, [[0, 5]]);
+                  }, _callee, null, [[0, 6]]);
                 }));
 
                 function performance(_x3) {
@@ -2836,13 +2852,19 @@ var onPlayerReady$1 = /*#__PURE__*/function () {
                 return performance;
               }(),
               interval: 20000
-            });
+            }); // sadece token ve sessionId'ye sahipsek isWatching bilgisini raporla
+
             player.on("play", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
               return regeneratorRuntime.wrap(function _callee2$(_context2) {
                 while (1) {
                   switch (_context2.prev = _context2.next) {
                     case 0:
-                      _context2.next = 2;
+                      if (!(token && seshId)) {
+                        _context2.next = 3;
+                        break;
+                      }
+
+                      _context2.next = 3;
                       return axios$1({
                         method: "post",
                         url: "session-connections",
@@ -2855,7 +2877,7 @@ var onPlayerReady$1 = /*#__PURE__*/function () {
                         }
                       });
 
-                    case 2:
+                    case 3:
                     case "end":
                       return _context2.stop();
                   }
@@ -2867,7 +2889,12 @@ var onPlayerReady$1 = /*#__PURE__*/function () {
                 while (1) {
                   switch (_context3.prev = _context3.next) {
                     case 0:
-                      _context3.next = 2;
+                      if (!(token && seshId)) {
+                        _context3.next = 3;
+                        break;
+                      }
+
+                      _context3.next = 3;
                       return axios$1({
                         method: "post",
                         url: "session-connections",
@@ -2880,7 +2907,7 @@ var onPlayerReady$1 = /*#__PURE__*/function () {
                         }
                       });
 
-                    case 2:
+                    case 3:
                     case "end":
                       return _context3.stop();
                   }
@@ -2888,12 +2915,12 @@ var onPlayerReady$1 = /*#__PURE__*/function () {
               }, _callee3);
             })));
 
-          case 17:
+          case 18:
           case "end":
             return _context4.stop();
         }
       }
-    }, _callee4, null, [[4, 10]]);
+    }, _callee4, null, [[4, 11]]);
   }));
 
   return function onPlayerReady(_x, _x2) {

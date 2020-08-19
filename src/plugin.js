@@ -29,8 +29,15 @@ const registerPlugin = videojs.registerPlugin || videojs.plugin;
 const onPlayerReady = async (player, options) => {
   player.addClass("vjs-livecastplugin");
 
-  let { eventId, user, playerUrl, streamId, token } = player.options_;
+  let {
+    eventId,
+    user = null,
+    playerUrl,
+    streamId,
+    token = null,
+  } = player.options_;
 
+  // halihazırda player, user ya da token olmadan da izlenilmesine izin veriyor
   player.src({
     type: "application/x-mpegURL",
     src: playerUrl,
@@ -39,39 +46,45 @@ const onPlayerReady = async (player, options) => {
 
   let seshRes;
 
+  // sadece token ve user varsa session connections'a kullanıcının izlemeye başladığını rapor et
   try {
-    seshRes = await axios({
-      method: "post",
-      url: "session-connections",
-      data: {
-        streamId,
-        webcastId: eventId,
-        regId: user._id,
-        watchStarted: new Date(),
-      },
-      headers: { Authorization: token },
-    });
+    if (token && user) {
+      seshRes = await axios({
+        method: "post",
+        url: "session-connections",
+        data: {
+          streamId,
+          webcastId: eventId,
+          regId: user._id,
+          watchStarted: new Date(),
+        },
+        headers: { Authorization: token },
+      });
+    }
   } catch (err) {
     console.log(err);
   }
 
-  let seshId = seshRes.data._id;
+  let seshId = seshRes.data._id || null;
 
+  // token, user ve sessionId'ye sahipsek kullanıcı metriklerini yolla
   player.eventTracking({
     performance: async (data) => {
       try {
-        await axios({
-          method: "post",
-          url: "session-connections",
-          data: {
-            streamId,
-            webcastId: eventId,
-            regId: user._id,
-            metrics: data,
-            id: seshId,
-          },
-          headers: { Authorization: token },
-        });
+        if (token && user && seshId) {
+          await axios({
+            method: "post",
+            url: "session-connections",
+            data: {
+              streamId,
+              webcastId: eventId,
+              regId: user._id,
+              metrics: data,
+              id: seshId,
+            },
+            headers: { Authorization: token },
+          });
+        }
       } catch (err) {
         console.log(err);
       }
@@ -79,21 +92,26 @@ const onPlayerReady = async (player, options) => {
     interval: 20000,
   });
 
+  // sadece token ve sessionId'ye sahipsek isWatching bilgisini raporla
   player.on("play", async () => {
-    await axios({
-      method: "post",
-      url: "session-connections",
-      data: { isWatching: true, id: seshId },
-      headers: { Authorization: token },
-    });
+    if (token && seshId) {
+      await axios({
+        method: "post",
+        url: "session-connections",
+        data: { isWatching: true, id: seshId },
+        headers: { Authorization: token },
+      });
+    }
   });
   player.on("pause", async () => {
-    await axios({
-      method: "post",
-      url: "session-connections",
-      data: { isWatching: false, id: seshId },
-      headers: { Authorization: token },
-    });
+    if (token && seshId) {
+      await axios({
+        method: "post",
+        url: "session-connections",
+        data: { isWatching: false, id: seshId },
+        headers: { Authorization: token },
+      });
+    }
   });
 };
 
