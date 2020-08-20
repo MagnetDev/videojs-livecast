@@ -38,6 +38,24 @@ function _asyncToGenerator(fn) {
   };
 }
 
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
 var version = "0.0.0";
 
 var bind = function bind(fn, thisArg) {
@@ -2743,7 +2761,7 @@ var registerPlugin$3 = videojs.registerPlugin || videojs.plugin; // const dom = 
 
 var onPlayerReady$1 = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(player, options) {
-    var _player$options_, eventId, _player$options_$user, user, playerUrl, streamId, _player$options_$toke, token, seshRes, seshId;
+    var _player$options_, eventId, _player$options_$user, user, playerUrl, streamId, _player$options_$toke, token, seshRes, userId, seshId, deviceId;
 
     return regeneratorRuntime.wrap(function _callee4$(_context4) {
       while (1) {
@@ -2757,43 +2775,43 @@ var onPlayerReady$1 = /*#__PURE__*/function () {
               src: playerUrl
             });
             player.hlsQualitySelector();
-            _context4.prev = 4;
+            userId = user._id || null; // token varsa authorization header'ına ekle
+            // elimizde userId varsa bunu regId olarak yolla
+            // elimizde user objesi varsa reg olarak gönder
 
-            if (!(token && user)) {
-              _context4.next = 9;
-              break;
-            }
-
+            _context4.prev = 5;
             _context4.next = 8;
             return axios$1({
               method: "post",
               url: "session-connections",
-              data: {
+              data: _extends({
                 streamId: streamId,
-                webcastId: eventId,
-                regId: user._id,
+                webcastId: eventId
+              }, user ? {
+                reg: user
+              } : null, userId ? {
+                regId: userId
+              } : null, {
                 watchStarted: new Date()
-              },
-              headers: {
+              }),
+              headers: _extends({}, token ? {
                 Authorization: token
-              }
+              } : null)
             });
 
           case 8:
             seshRes = _context4.sent;
-
-          case 9:
             _context4.next = 14;
             break;
 
           case 11:
             _context4.prev = 11;
-            _context4.t0 = _context4["catch"](4);
+            _context4.t0 = _context4["catch"](5);
             console.log(_context4.t0);
 
           case 14:
-            seshId = seshRes.data._id || null; // token, user ve sessionId'ye sahipsek kullanıcı metriklerini yolla
-
+            seshId = seshRes.data._id || null;
+            deviceId = seshRes.data.deviceId || null;
             player.eventTracking({
               performance: function () {
                 var _performance = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(data) {
@@ -2802,43 +2820,43 @@ var onPlayerReady$1 = /*#__PURE__*/function () {
                       switch (_context.prev = _context.next) {
                         case 0:
                           _context.prev = 0;
-
-                          if (!(token && user && seshId)) {
-                            _context.next = 4;
-                            break;
-                          }
-
-                          _context.next = 4;
+                          _context.next = 3;
                           return axios$1({
                             method: "post",
                             url: "session-connections",
-                            data: {
+                            data: _extends({
                               streamId: streamId,
-                              webcastId: eventId,
-                              regId: user._id,
+                              webcastId: eventId
+                            }, user ? {
+                              reg: user
+                            } : null, userId ? {
+                              regId: userId
+                            } : null, {
                               metrics: data,
                               id: seshId
-                            },
-                            headers: {
+                            }, deviceId ? {
+                              deviceId: deviceId
+                            } : null),
+                            headers: _extends({}, token ? {
                               Authorization: token
-                            }
+                            } : null)
                           });
 
-                        case 4:
-                          _context.next = 9;
+                        case 3:
+                          _context.next = 8;
                           break;
 
-                        case 6:
-                          _context.prev = 6;
+                        case 5:
+                          _context.prev = 5;
                           _context.t0 = _context["catch"](0);
                           console.log(_context.t0);
 
-                        case 9:
+                        case 8:
                         case "end":
                           return _context.stop();
                       }
                     }
-                  }, _callee, null, [[0, 6]]);
+                  }, _callee, null, [[0, 5]]);
                 }));
 
                 function performance(_x3) {
@@ -2848,32 +2866,28 @@ var onPlayerReady$1 = /*#__PURE__*/function () {
                 return performance;
               }(),
               interval: 20000
-            }); // sadece token ve sessionId'ye sahipsek isWatching bilgisini raporla
-
+            });
             player.on("play", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
               return regeneratorRuntime.wrap(function _callee2$(_context2) {
                 while (1) {
                   switch (_context2.prev = _context2.next) {
                     case 0:
-                      if (!(token && seshId)) {
-                        _context2.next = 3;
-                        break;
-                      }
-
-                      _context2.next = 3;
+                      _context2.next = 2;
                       return axios$1({
                         method: "post",
                         url: "session-connections",
-                        data: {
+                        data: _extends({
                           isWatching: true,
                           id: seshId
-                        },
-                        headers: {
+                        }, deviceId ? {
+                          deviceId: deviceId
+                        } : null),
+                        headers: _extends({}, token ? {
                           Authorization: token
-                        }
+                        } : null)
                       });
 
-                    case 3:
+                    case 2:
                     case "end":
                       return _context2.stop();
                   }
@@ -2885,25 +2899,22 @@ var onPlayerReady$1 = /*#__PURE__*/function () {
                 while (1) {
                   switch (_context3.prev = _context3.next) {
                     case 0:
-                      if (!(token && seshId)) {
-                        _context3.next = 3;
-                        break;
-                      }
-
-                      _context3.next = 3;
+                      _context3.next = 2;
                       return axios$1({
                         method: "post",
                         url: "session-connections",
-                        data: {
+                        data: _extends({
                           isWatching: false,
                           id: seshId
-                        },
-                        headers: {
+                        }, deviceId ? {
+                          deviceId: deviceId
+                        } : null),
+                        headers: _extends({}, token ? {
                           Authorization: token
-                        }
+                        } : null)
                       });
 
-                    case 3:
+                    case 2:
                     case "end":
                       return _context3.stop();
                   }
@@ -2911,12 +2922,12 @@ var onPlayerReady$1 = /*#__PURE__*/function () {
               }, _callee3);
             })));
 
-          case 18:
+          case 19:
           case "end":
             return _context4.stop();
         }
       }
-    }, _callee4, null, [[4, 11]]);
+    }, _callee4, null, [[5, 11]]);
   }));
 
   return function onPlayerReady(_x, _x2) {

@@ -65,7 +65,7 @@
     "axios": "^0.19.2",
     "global": "^4.3.2",
     "video.js": "^6 || ^7",
-    "videojs-event-tracking": "file:videojs-event-tracking",
+    "videojs-event-tracking": "file:./videojs-event-tracking",
     "videojs-hls-quality-selector": "^1.1.1"
   },
   "devDependencies": {
