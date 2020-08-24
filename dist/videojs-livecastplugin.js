@@ -2767,14 +2767,41 @@
 
   var onPlayerReady$1 = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(player, options) {
-      var _player$options_, eventId, _player$options_$user, user, playerUrl, streamId, _player$options_$toke, token, seshRes, userId, seshId, deviceId;
+      var _player$options_, eventId, _player$options_$user, user, _player$options_$toke, token, streamRes, stream, _id, playerUrl, streamId, seshRes, userId, seshId, deviceId;
 
       return regeneratorRuntime.wrap(function _callee4$(_context4) {
         while (1) {
           switch (_context4.prev = _context4.next) {
             case 0:
               player.addClass("vjs-livecastplugin");
-              _player$options_ = player.options_, eventId = _player$options_.eventId, _player$options_$user = _player$options_.user, user = _player$options_$user === void 0 ? null : _player$options_$user, playerUrl = _player$options_.playerUrl, streamId = _player$options_.streamId, _player$options_$toke = _player$options_.token, token = _player$options_$toke === void 0 ? null : _player$options_$toke; // halihazırda player, user ya da token olmadan da izlenilmesine izin veriyor
+              _player$options_ = player.options_, eventId = _player$options_.eventId, _player$options_$user = _player$options_.user, user = _player$options_$user === void 0 ? null : _player$options_$user, _player$options_$toke = _player$options_.token, token = _player$options_$toke === void 0 ? null : _player$options_$toke;
+              _context4.prev = 2;
+              _context4.next = 5;
+              return axios$1({
+                method: "get",
+                url: "stream",
+                params: {
+                  webcastId: eventId
+                },
+                headers: {
+                  Authorization: token
+                }
+              });
+
+            case 5:
+              streamRes = _context4.sent;
+              _context4.next = 11;
+              break;
+
+            case 8:
+              _context4.prev = 8;
+              _context4.t0 = _context4["catch"](2);
+              console.log(_context4.t0);
+
+            case 11:
+              stream = streamRes.data[0];
+              _id = stream._id, playerUrl = stream.playerUrl;
+              streamId = _id; // halihazırda player, user ya da token olmadan da izlenilmesine izin veriyor
 
               player.src({
                 type: "application/x-mpegURL",
@@ -2785,8 +2812,8 @@
               // elimizde userId varsa bunu regId olarak yolla
               // elimizde user objesi varsa reg olarak gönder
 
-              _context4.prev = 5;
-              _context4.next = 8;
+              _context4.prev = 17;
+              _context4.next = 20;
               return axios$1({
                 method: "post",
                 url: "session-connections",
@@ -2805,17 +2832,17 @@
                 } : null)
               });
 
-            case 8:
+            case 20:
               seshRes = _context4.sent;
-              _context4.next = 14;
+              _context4.next = 26;
               break;
 
-            case 11:
-              _context4.prev = 11;
-              _context4.t0 = _context4["catch"](5);
-              console.log(_context4.t0);
+            case 23:
+              _context4.prev = 23;
+              _context4.t1 = _context4["catch"](17);
+              console.log(_context4.t1);
 
-            case 14:
+            case 26:
               seshId = seshRes.data._id || null;
               deviceId = seshRes.data.deviceId || null;
               player.eventTracking({
@@ -2928,12 +2955,12 @@
                 }, _callee3);
               })));
 
-            case 19:
+            case 31:
             case "end":
               return _context4.stop();
           }
         }
-      }, _callee4, null, [[5, 11]]);
+      }, _callee4, null, [[2, 8], [17, 23]]);
     }));
 
     return function onPlayerReady(_x, _x2) {

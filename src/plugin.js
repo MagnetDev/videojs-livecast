@@ -32,10 +32,26 @@ const onPlayerReady = async (player, options) => {
   let {
     eventId,
     user = null,
-    playerUrl,
-    streamId,
+    // playerUrl,
+    // streamId,
     token = null,
   } = player.options_;
+  let streamRes;
+
+  try {
+    streamRes = await axios({
+      method: "get",
+      url: "stream",
+      params: { webcastId: eventId },
+      headers: { Authorization: token },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+
+  let stream = streamRes.data[0];
+  let { _id, playerUrl } = stream;
+  let streamId = _id;
 
   // halihazırda player, user ya da token olmadan da izlenilmesine izin veriyor
   player.src({
