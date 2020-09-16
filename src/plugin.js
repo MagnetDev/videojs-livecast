@@ -3,7 +3,7 @@ import { version as VERSION } from "../package.json";
 import axios from "axios";
 import "videojs-contrib-quality-levels";
 import "videojs-hls-quality-selector";
-import "videojs-event-tracking";
+import "../videojs-event-tracking/dist/videojs-event-tracking.es";
 
 // Default options for the plugin.
 const defaults = {};
