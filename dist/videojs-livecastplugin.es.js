@@ -2255,7 +2255,9 @@ registerPlugin$1('hlsQualitySelector', hlsQualitySelector);
 hlsQualitySelector.VERSION = version$2;
 
 /*! @name videojs-event-tracking @version 1.0.1 @license MIT */
+
 var version$3 = "1.0.1";
+
 /**
  * @function BufferTracking
  * @param    {Object} [options={}]
@@ -2278,7 +2280,6 @@ var version$3 = "1.0.1";
  * => secondsToLoad:  Total amount of time in seconds buffering took
  * => bufferCount:    Total buffer events for this source
  */
-
 var BufferTracking = function BufferTracking(config) {
   var _this = this;
 
@@ -2348,6 +2349,7 @@ var BufferTracking = function BufferTracking(config) {
   this.on('waiting', onPlayerWaiting);
   this.on('timeupdate', onTimeupdate);
 };
+
 /**
  * Tracks when users pause the video.
  *
@@ -2361,8 +2363,6 @@ var BufferTracking = function BufferTracking(config) {
  * @param    {Object} [config={}]
  *           An object of config left to the plugin author to define.
  */
-
-
 var PauseTracking = function PauseTracking(config) {
   var player = this;
   var pauseCount = 0;
@@ -2394,6 +2394,7 @@ var PauseTracking = function PauseTracking(config) {
     }, 300);
   });
 };
+
 /**
  * Track Overall Percentile (1st, 2nd, 3rd, and 4th) of Completion
  * This event triggers each quarter of a video.
@@ -2414,8 +2415,6 @@ var PauseTracking = function PauseTracking(config) {
  * @param    {Object} [config={}]
  *           An object of config left to the plugin author to define.
  */
-
-
 var PercentileTracking = function PercentileTracking(config) {
   var player = this;
   var first = false;
@@ -2492,6 +2491,7 @@ var PercentileTracking = function PercentileTracking(config) {
     }
   });
 };
+
 /**
  * Track Overall Performance
  * This event triggers when the player has changed sources, has ended, or
@@ -2513,8 +2513,6 @@ var PercentileTracking = function PercentileTracking(config) {
  * @param    {Object} [config={}]
  *           An object of config left to the plugin author to define.
  */
-
-
 var PerformanceTracking = function PerformanceTracking(config) {
   if (typeof config === "undefined" || typeof config.performance !== "function") {
     return;
@@ -2606,6 +2604,7 @@ var PerformanceTracking = function PerformanceTracking(config) {
     initialLoadTime = data.secondsToLoad;
   });
 };
+
 /**
  * Track Initial Play Event
  * This event is triggered when the video has been played for the first time.
@@ -2623,8 +2622,6 @@ var PerformanceTracking = function PerformanceTracking(config) {
  * @param    {Object} [config={}]
  *           An object of config left to the plugin author to define.
  */
-
-
 var PlayTracking = function PlayTracking(config) {
   var _this = this;
 
@@ -2665,6 +2662,7 @@ var PlayTracking = function PlayTracking(config) {
   this.on('loadeddata', onLoadedData);
   this.on('playing', onPlaying);
 };
+
 /**
  * Track Seeking Events
  * During playback, we are tracking how many times a person seeks, and
@@ -2681,8 +2679,6 @@ var PlayTracking = function PlayTracking(config) {
  * @param    {Object} [config={}]
  *           An object of config left to the plugin author to define.
  */
-
-
 var SeekTracking = function SeekTracking(config) {
   var player = this;
   var seekCount = 0;
