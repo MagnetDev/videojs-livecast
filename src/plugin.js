@@ -35,13 +35,14 @@ const onPlayerReady = async (player, options) => {
     // playerUrl,
     // streamId,
     token = null,
+    apiHost = '',
   } = player.options_;
   let streamRes;
 
   try {
     streamRes = await axios({
       method: "get",
-      url: "stream",
+      url: `${apiHost}stream`,
       params: { webcastId: eventId },
       headers: { Authorization: token },
     });
@@ -83,7 +84,7 @@ const onPlayerReady = async (player, options) => {
   try {
     seshRes = await axios({
       method: "post",
-      url: "session-connections",
+      url: `${apiHost}session-connections`,
       data: {
         streamId,
         webcastId: eventId,
@@ -105,7 +106,7 @@ const onPlayerReady = async (player, options) => {
       try {
         await axios({
           method: "post",
-          url: "session-connections",
+          url: `${apiHost}session-connections`,
           data: {
             streamId,
             webcastId: eventId,
@@ -127,7 +128,7 @@ const onPlayerReady = async (player, options) => {
   player.on("play", async () => {
     await axios({
       method: "post",
-      url: "session-connections",
+      url: `${apiHost}session-connections`,
       data: {
         isWatching: true,
         id: seshId,
@@ -139,7 +140,7 @@ const onPlayerReady = async (player, options) => {
   player.on("pause", async () => {
     await axios({
       method: "post",
-      url: "session-connections",
+      url: `${apiHost}session-connections`,
       data: {
         isWatching: false,
         id: seshId,
