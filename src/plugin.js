@@ -54,10 +54,23 @@ const onPlayerReady = async (player, options) => {
   let streamId = _id;
 
   // halihazırda player, user ya da token olmadan da izlenilmesine izin veriyor
-  player.src({
-    type: "application/x-mpegURL",
-    src: playerUrl,
-  });
+
+  /**
+   * Player source'unu set etme işlemi
+   * dil seçimlerinin ayrı sourceları olduğundan
+   * pluginin kullanılacağı kaynaktan veya dil seçim plugin'i tarafından
+   * dil seçimine göre set edileceği için
+   * burada devre dışı bırakıldı.
+   * hlsQualitySelector plugini çalışıyor ve çalışmaya devam etmesi gerekiyor.
+   *
+   * Author: Erdoğan Bulut
+   */
+  // player.src({
+  //   type: "application/x-mpegURL",
+  //   src: playerUrl,
+  // });
+  // Player source set etme işlemi sonu
+
   player.hlsQualitySelector();
 
   let seshRes;
