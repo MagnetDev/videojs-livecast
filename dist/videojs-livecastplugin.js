@@ -1,4 +1,4 @@
-/*! @name videojs-livecastplugin @version 0.0.1 @license UNLICENSED */
+/*! @name videojs-livecastplugin @version 0.0.2 @license UNLICENSED */
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('video.js'), require('global/document')) :
   typeof define === 'function' && define.amd ? define(['video.js', 'global/document'], factory) :
@@ -62,7 +62,7 @@
     return _extends.apply(this, arguments);
   }
 
-  var version = "0.0.1";
+  var version = "0.0.2";
 
   var bind = function bind(fn, thisArg) {
     return function wrap() {
