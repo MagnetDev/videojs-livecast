@@ -2767,19 +2767,19 @@
 
   var onPlayerReady$1 = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(player, options) {
-      var _player$options_, eventId, _player$options_$user, user, _player$options_$toke, token, streamRes, stream, _id, playerUrl, streamId, seshRes, userId, seshId, deviceId;
+      var _player$options_, eventId, _player$options_$user, user, _player$options_$toke, token, _player$options_$apiH, apiHost, streamRes, stream, _id, playerUrl, streamId, seshRes, userId, seshId, deviceId;
 
       return regeneratorRuntime.wrap(function _callee4$(_context4) {
         while (1) {
           switch (_context4.prev = _context4.next) {
             case 0:
               player.addClass("vjs-livecastplugin");
-              _player$options_ = player.options_, eventId = _player$options_.eventId, _player$options_$user = _player$options_.user, user = _player$options_$user === void 0 ? null : _player$options_$user, _player$options_$toke = _player$options_.token, token = _player$options_$toke === void 0 ? null : _player$options_$toke;
+              _player$options_ = player.options_, eventId = _player$options_.eventId, _player$options_$user = _player$options_.user, user = _player$options_$user === void 0 ? null : _player$options_$user, _player$options_$toke = _player$options_.token, token = _player$options_$toke === void 0 ? null : _player$options_$toke, _player$options_$apiH = _player$options_.apiHost, apiHost = _player$options_$apiH === void 0 ? '' : _player$options_$apiH;
               _context4.prev = 2;
               _context4.next = 5;
               return axios$1({
                 method: "get",
-                url: "stream",
+                url: apiHost + "stream",
                 params: {
                   webcastId: eventId
                 },
@@ -2803,20 +2803,32 @@
               _id = stream._id, playerUrl = stream.playerUrl;
               streamId = _id; // halihazırda player, user ya da token olmadan da izlenilmesine izin veriyor
 
-              player.src({
-                type: "application/x-mpegURL",
-                src: playerUrl
-              });
+              /**
+               * Player source'unu set etme işlemi
+               * dil seçimlerinin ayrı sourceları olduğundan
+               * pluginin kullanılacağı kaynaktan veya dil seçim plugin'i tarafından
+               * dil seçimine göre set edileceği için
+               * burada devre dışı bırakıldı.
+               * hlsQualitySelector plugini çalışıyor ve çalışmaya devam etmesi gerekiyor.
+               *
+               * Author: Erdoğan Bulut
+               */
+              // player.src({
+              //   type: "application/x-mpegURL",
+              //   src: playerUrl,
+              // });
+              // Player source set etme işlemi sonu
+
               player.hlsQualitySelector();
               userId = user._id || null; // token varsa authorization header'ına ekle
               // elimizde userId varsa bunu regId olarak yolla
               // elimizde user objesi varsa reg olarak gönder
 
-              _context4.prev = 17;
-              _context4.next = 20;
+              _context4.prev = 16;
+              _context4.next = 19;
               return axios$1({
                 method: "post",
-                url: "session-connections",
+                url: apiHost + "session-connections",
                 data: _extends({
                   streamId: streamId,
                   webcastId: eventId
@@ -2832,17 +2844,17 @@
                 } : null)
               });
 
-            case 20:
+            case 19:
               seshRes = _context4.sent;
-              _context4.next = 26;
+              _context4.next = 25;
               break;
 
-            case 23:
-              _context4.prev = 23;
-              _context4.t1 = _context4["catch"](17);
+            case 22:
+              _context4.prev = 22;
+              _context4.t1 = _context4["catch"](16);
               console.log(_context4.t1);
 
-            case 26:
+            case 25:
               seshId = seshRes.data._id || null;
               deviceId = seshRes.data.deviceId || null;
               player.eventTracking({
@@ -2856,7 +2868,7 @@
                             _context.next = 3;
                             return axios$1({
                               method: "post",
-                              url: "session-connections",
+                              url: apiHost + "session-connections",
                               data: _extends({
                                 streamId: streamId,
                                 webcastId: eventId
@@ -2908,7 +2920,7 @@
                         _context2.next = 2;
                         return axios$1({
                           method: "post",
-                          url: "session-connections",
+                          url: apiHost + "session-connections",
                           data: _extends({
                             isWatching: true,
                             id: seshId
@@ -2935,7 +2947,7 @@
                         _context3.next = 2;
                         return axios$1({
                           method: "post",
-                          url: "session-connections",
+                          url: apiHost + "session-connections",
                           data: _extends({
                             isWatching: false,
                             id: seshId
@@ -2955,12 +2967,12 @@
                 }, _callee3);
               })));
 
-            case 31:
+            case 30:
             case "end":
               return _context4.stop();
           }
         }
-      }, _callee4, null, [[2, 8], [17, 23]]);
+      }, _callee4, null, [[2, 8], [16, 22]]);
     }));
 
     return function onPlayerReady(_x, _x2) {
