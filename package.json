@@ -1,6 +1,6 @@
 {
   "name": "videojs-livecastplugin",
-  "version": "0.0.4",
+  "version": "0.0.7",
   "description": "",
   "main": "dist/videojs-livecastplugin.cjs.js",
   "module": "dist/videojs-livecastplugin.es.js",
@@ -56,7 +56,8 @@
     "index.html",
     "scripts/",
     "src/",
-    "test/"
+    "test/",
+    "videojs-event-tracking/"
   ],
   "husky": {
     "hooks": {}

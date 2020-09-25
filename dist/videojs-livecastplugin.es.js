@@ -1,4 +1,4 @@
-/*! @name videojs-livecastplugin @version 0.0.4 @license UNLICENSED */
+/*! @name videojs-livecastplugin @version 0.0.7 @license UNLICENSED */
 import videojs from 'video.js';
 import document$1 from 'global/document';
 
@@ -56,7 +56,7 @@ function _extends() {
   return _extends.apply(this, arguments);
 }
 
-var version = "0.0.4";
+var version = "0.0.7";
 
 var bind = function bind(fn, thisArg) {
   return function wrap() {
