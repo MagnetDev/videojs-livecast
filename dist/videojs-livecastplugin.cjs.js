@@ -1,4 +1,4 @@
-/*! @name videojs-livecastplugin @version 0.0.2 @license UNLICENSED */
+/*! @name videojs-livecastplugin @version 0.0.3 @license UNLICENSED */
 'use strict';
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
@@ -60,7 +60,7 @@ function _extends() {
   return _extends.apply(this, arguments);
 }
 
-var version = "0.0.2";
+var version = "0.0.3";
 
 var bind = function bind(fn, thisArg) {
   return function wrap() {

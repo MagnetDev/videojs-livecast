@@ -1,6 +1,6 @@
 {
   "name": "videojs-livecastplugin",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "",
   "main": "dist/videojs-livecastplugin.cjs.js",
   "module": "dist/videojs-livecastplugin.es.js",
