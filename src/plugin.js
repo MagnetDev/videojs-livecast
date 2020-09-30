@@ -35,7 +35,7 @@ const onPlayerReady = async (player, options) => {
     // playerUrl,
     // streamId,
     token = null,
-    apiHost = '',
+    apiHost = "",
   } = player.options_;
   let streamRes;
 
@@ -66,10 +66,12 @@ const onPlayerReady = async (player, options) => {
    *
    * Author: Erdoğan Bulut
    */
-  // player.src({
-  //   type: "application/x-mpegURL",
-  //   src: playerUrl,
-  // });
+
+  // şimdilik comment dışına alındı
+  player.src({
+    type: "application/x-mpegURL",
+    src: playerUrl,
+  });
   // Player source set etme işlemi sonu
 
   player.hlsQualitySelector();
